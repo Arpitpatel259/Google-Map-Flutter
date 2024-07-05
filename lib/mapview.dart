@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -6,13 +7,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math' show max, min;
 
 class MapView extends StatefulWidget {
+  const MapView({super.key});
+
   @override
   _MapViewState createState() => _MapViewState();
 }
 
 class _MapViewState extends State<MapView> {
   late GoogleMapController mapController;
-  CameraPosition _initialLocation =
+  final CameraPosition _initialLocation =
       const CameraPosition(target: LatLng(0.0, 0.0));
   Position? _currentPosition;
   String _currentAddress = '';
@@ -25,7 +28,6 @@ class _MapViewState extends State<MapView> {
 
   String _startAddress = '';
   String _destinationAddress = '';
-  String? _placeDistance;
 
   Set<Marker> markers = {};
   late PolylinePoints polylinePoints;
@@ -105,7 +107,9 @@ class _MapViewState extends State<MapView> {
         _startAddress = _currentAddress;
       });
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -182,7 +186,9 @@ class _MapViewState extends State<MapView> {
 
       return true;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return false;
     }
   }
@@ -192,7 +198,7 @@ class _MapViewState extends State<MapView> {
       double destinationLatitude, double destinationLongitude) async {
     try {
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        'YOUR_API_KEY', // Replace with your Google Maps API Key
+        'AIzaSyCl4Yjbq5GiZYPBS3TfoqV7YOmHCEjQCIU', // Replace with your Google Maps API Key
         PointLatLng(startLatitude, startLongitude),
         PointLatLng(destinationLatitude, destinationLongitude),
         travelMode: TravelMode.driving,
@@ -203,7 +209,7 @@ class _MapViewState extends State<MapView> {
             .map((point) => LatLng(point.latitude, point.longitude))
             .toList();
 
-        PolylineId id = PolylineId('poly');
+        PolylineId id = const PolylineId('poly');
         Polyline polyline = Polyline(
           polylineId: id,
           color: Colors.blue,
@@ -218,10 +224,14 @@ class _MapViewState extends State<MapView> {
           polylines[id] = polyline;
         });
       } else {
-        print('No polyline points found');
+        if (kDebugMode) {
+          print('No polyline points found');
+        }
       }
     } catch (e) {
-      print('Error: $e');
+      if (kDebugMode) {
+        print('Error: $e');
+      }
     }
   }
 
@@ -251,7 +261,7 @@ class _MapViewState extends State<MapView> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.grey,
                     offset: Offset(0.0, 1.0), // (x, y)
@@ -267,9 +277,9 @@ class _MapViewState extends State<MapView> {
                     decoration: InputDecoration(
                       hintText: 'Start Address',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                      contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.cancel),
+                        icon: const Icon(Icons.cancel),
                         onPressed: () => startAddressController.clear(),
                       ),
                     ),
@@ -279,16 +289,16 @@ class _MapViewState extends State<MapView> {
                       });
                     },
                   ),
-                  Divider(height: 1.0, color: Colors.grey),
+                  const Divider(height: 1.0, color: Colors.grey),
                   TextField(
                     controller: destinationAddressController,
                     focusNode: destinationAddressFocusNode,
                     decoration: InputDecoration(
                       hintText: 'Destination Address',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                      contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.cancel),
+                        icon: const Icon(Icons.cancel),
                         onPressed: () => destinationAddressController.clear(),
                       ),
                     ),
@@ -298,7 +308,7 @@ class _MapViewState extends State<MapView> {
                       });
                     },
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed:
                         (_startAddress != '' && _destinationAddress != '')
@@ -306,9 +316,9 @@ class _MapViewState extends State<MapView> {
                                 await _calculateDistance();
                               }
                             : null,
-                    child: Text('Show Route'),
+                    child: const Text('Show Route'),
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                 ],
               ),
             ),
@@ -319,7 +329,7 @@ class _MapViewState extends State<MapView> {
         onPressed: () {
           _getCurrentLocation();
         },
-        child: Icon(Icons.location_searching),
+        child: const Icon(Icons.location_searching),
       ),
     );
   }
