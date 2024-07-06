@@ -38,7 +38,7 @@ dependencies:
 
   google_maps_flutter: ^2.5.3
   custom_info_window: ^1.0.1
-  geolocator: ^7.0.0
+  geolocator: ^9.0.2
   geocoding: ^3.0.0
   flutter_polyline_points: ^1.0.0
   google_maps_webservice: ^0.0.19
@@ -66,8 +66,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/images/
+  assets:
+    - assets/dark_map_style.json
+    - assets/light_map_style.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
