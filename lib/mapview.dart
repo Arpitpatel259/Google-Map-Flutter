@@ -20,7 +20,6 @@ class _MapScreenState extends State<MapScreen> {
   final TextEditingController _destinationController = TextEditingController();
 
   // Latitude Longitude
-  LatLng? _currentLocation;
   final CameraPosition _initialLocation =
       const CameraPosition(target: LatLng(0, 0), zoom: 12);
   List<LatLng> _polylineCoordinates = [];
@@ -173,7 +172,6 @@ class _MapScreenState extends State<MapScreen> {
       LatLng latLng = LatLng(position.latitude, position.longitude);
 
       setState(() {
-        _currentLocation = latLng;
       });
 
       _controller?.animateCamera(
