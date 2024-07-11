@@ -172,6 +172,13 @@ class _MapScreenState extends State<MapScreen> {
       LatLng latLng = LatLng(position.latitude, position.longitude);
 
       setState(() {
+        _markers.clear();
+        _markers.add(
+          Marker(
+            markerId: const MarkerId('currentLocation'),
+            position: latLng,
+          ),
+        );
       });
 
       _controller?.animateCamera(
