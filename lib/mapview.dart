@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -147,18 +148,18 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  void _toggleMapTheme() {
-    setState(() {
-      _isDarkTheme = !_isDarkTheme;
-      _setMapStyle();
-    });
-  }
+  // void _toggleMapTheme() {
+  //   setState(() {
+  //     _isDarkTheme = !_isDarkTheme;
+  //     _setMapStyle();
+  //   });
+  // }
 
-  void _setMapStyle() {
-    if (_controller != null) {
-      _controller!.setMapStyle(_isDarkTheme ? _darkMapStyle : _lightMapStyle);
-    }
-  }
+  // void _setMapStyle() {
+  //   if (_controller != null) {
+  //     // _controller!.setMapStyle(_isDarkTheme ? _darkMapStyle : "");
+  //   }
+  // }
 
   void _showSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -168,6 +169,11 @@ class _MapScreenState extends State<MapScreen> {
 
   void _goToCurrentLocation() async {
     try {
+      var status = await Permission.location.status;
+      if (status.isDenied) {
+        await Permission.location.request().isGranted;
+      }
+
       Position position = await Geolocator.getCurrentPosition();
       LatLng latLng = LatLng(position.latitude, position.longitude);
 
@@ -199,12 +205,12 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Google Maps'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.dark_mode_outlined),
-            onPressed: _toggleMapTheme,
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.dark_mode_outlined),
+        //     onPressed: _toggleMapTheme,
+        //   ),
+        // ],
       ),
       body: Column(
         children: [
@@ -260,7 +266,7 @@ class _MapScreenState extends State<MapScreen> {
               polylines: _polylines,
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
-                _setMapStyle();
+                //_setMapStyle();
               },
               onTap: _handleMapTap,
             ),
